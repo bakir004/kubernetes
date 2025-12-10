@@ -10,9 +10,9 @@ resources:
 
 replicas:
   - name: backend
-    count: 3
+    count: 4
   - name: frontend
-    count: 3
+    count: 4
 
 images:
   - name: bakeroni1/backend
