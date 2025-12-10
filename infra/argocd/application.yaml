@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/bakir004/kubernetes.git
     targetRevision: HEAD
-    path: .
+    path: apps
   destination:
     server: https://kubernetes.default.svc
     namespace: default

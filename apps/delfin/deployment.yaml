@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: delfin
+  labels:
+    app: delfin
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: delfin
+  template:
+    metadata:
+      labels:
+        app: delfin
+    spec:
+      containers:
+        - name: delfin
+          image: bakeroni1/delfin:latest
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: delfin
+spec:
+  selector:
+    app: delfin
+  ports:
+    - port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: delfin
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: delfin.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: delfin
+                port:
+                  number: 80
