@@ -2,61 +2,61 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: delfin
+  name: backend
   namespace: default
   labels:
-    app: delfin
+    app: backend
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: delfin
+      app: backend
   template:
     metadata:
       labels:
-        app: delfin
+        app: backend
     spec:
       containers:
-        - name: delfin
-          image: bakeroni1/delfin
+        - name: backend
+          image: bakeroni1/backend:1.0.0
           ports:
-            - containerPort: 80
+            - containerPort: 3000
               name: http
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: delfin
+  name: backend
   namespace: default
   labels:
-    app: delfin
+    app: backend
 spec:
   type: ClusterIP
   ports:
-    - port: 80
-      targetPort: 80
+    - port: 3000
+      targetPort: 3000
       protocol: TCP
       name: http
   selector:
-    app: delfin
+    app: backend
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: delfin-ingress
+  name: backend-ingress
   namespace: default
   annotations:
     traefik.ingress.kubernetes.io/redirect-entry-point: "http"
 spec:
   ingressClassName: traefik
   rules:
-    - host: delfin.local
+    - host: backend.local
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: delfin
+                name: backend
                 port:
-                  number: 80
+                  number: 3000
