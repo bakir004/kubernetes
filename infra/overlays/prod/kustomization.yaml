@@ -10,15 +10,15 @@ resources:
 
 replicas:
   - name: backend
-    count: 4
+    count: 3
   - name: frontend
-    count: 4
+    count: 3
 
 images:
   - name: bakeroni1/backend
-    newTag: 1.0.0
+    newTag: 1.0.1
   - name: bakeroni1/frontend
-    newTag: 1.0.0
+    newTag: 1.0.2
 
 patchesStrategicMerge:
   - |-
