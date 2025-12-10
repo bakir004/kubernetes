@@ -1,4 +1,15 @@
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: default
+data:
+  config.js: |
+    window.APP_CONFIG = {
+      backendUrl: "http://backend:3000"
+    };
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -22,6 +33,14 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/config.js
+              subPath: config.js
+      volumes:
+        - name: config
+          configMap:
+            name: frontend-config
 ---
 apiVersion: v1
 kind: Service
