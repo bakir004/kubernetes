@@ -10,7 +10,7 @@ app.use(express.json());
 
 // In-memory storage for todos
 let todos = [
-  { id: 1, title: "Learn Kubernetes", completed: false },
+  { id: 1, title: "Nigga Kubernetes", completed: false },
   { id: 2, title: "Build React app", completed: true },
   { id: 3, title: "Deploy to cluster", completed: false },
 ];

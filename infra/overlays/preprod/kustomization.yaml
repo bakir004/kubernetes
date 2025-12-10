@@ -14,9 +14,9 @@ replicas:
 
 images:
   - name: bakeroni1/backend
-    newTag: latest
+    newTag: 1.0.1
   - name: bakeroni1/frontend
-    newTag: latest
+    newTag: 1.0.2
 
 patchesStrategicMerge:
   - |-
