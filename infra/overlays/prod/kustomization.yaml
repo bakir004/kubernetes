@@ -1,0 +1,63 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: prod
+
+resources:
+  - ../../base
+  # Note: cert-manager.yaml (ClusterIssuer) should be applied separately as it's cluster-scoped
+  # kubectl apply -f cert-manager.yaml
+
+replicas:
+  - name: backend
+    count: 3
+  - name: frontend
+    count: 3
+
+images:
+  - name: bakeroni1/backend
+    newTag: 1.0.0
+  - name: bakeroni1/frontend
+    newTag: 1.0.0
+
+patchesStrategicMerge:
+  - |-
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: backend-ingress
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/redirect-entry-point: "https"
+    spec:
+      tls:
+        - hosts:
+            - api.cluster.bakircinjarevic.com
+          secretName: backend-tls
+      rules:
+        - host: api.cluster.bakircinjarevic.com
+  - |-
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: frontend-ingress
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-prod
+        traefik.ingress.kubernetes.io/redirect-entry-point: "https"
+    spec:
+      tls:
+        - hosts:
+            - cluster.bakircinjarevic.com
+          secretName: frontend-tls
+      rules:
+        - host: cluster.bakircinjarevic.com
+  - |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: frontend-config
+    data:
+      config.js: |
+        window.APP_CONFIG = {
+          backendUrl: "https://api.cluster.bakircinjarevic.com"
+        };

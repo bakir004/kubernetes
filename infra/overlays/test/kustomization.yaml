@@ -1,0 +1,47 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: test
+
+resources:
+  - ../../base
+
+replicas:
+  - name: backend
+    count: 1
+  - name: frontend
+    count: 1
+
+images:
+  - name: bakeroni1/backend
+    newTag: 1.0.0
+  - name: bakeroni1/frontend
+    newTag: 1.0.0
+
+patchesStrategicMerge:
+  - |-
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: backend-ingress
+    spec:
+      rules:
+        - host: backend.local
+  - |-
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: frontend-ingress
+    spec:
+      rules:
+        - host: frontend.local
+  - |-
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: frontend-config
+    data:
+      config.js: |
+        window.APP_CONFIG = {
+          backendUrl: "http://backend.local"
+        };

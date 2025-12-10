@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prod-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bakir004/kubernetes.git
+    targetRevision: main
+    path: infra/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prod
+  syncPolicy:
+    automated:
+      prune: false # Manual sync for production
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
