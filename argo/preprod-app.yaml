@@ -7,7 +7,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/bakir004/kubernetes.git
-    targetRevision: dev
+    targetRevision: main
     path: infra/overlays/preprod
   destination:
     server: https://kubernetes.default.svc
