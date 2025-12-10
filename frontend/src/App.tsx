@@ -63,7 +63,7 @@ function App() {
   if (error) {
     return (
       <div className="container">
-        <h1>Todo App</h1>
+        <h1>TODO NOT App 1.0.1</h1>
         <div className="error">
           <p>Error: {error}</p>
           <p>Backend URL: {backendUrl}</p>
@@ -75,7 +75,7 @@ function App() {
 
   return (
     <div className="container">
-      <h1>Todo App</h1>
+      <h1>TODO NOT App 1.0.1</h1>
       <div className="info">
         <p>Backend: {backendUrl}</p>
         <p>Total todos: {todos.length}</p>
