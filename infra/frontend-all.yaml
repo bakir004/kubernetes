@@ -7,7 +7,7 @@ metadata:
 data:
   config.js: |
     window.APP_CONFIG = {
-      backendUrl: "http://backend:3000"
+      backendUrl: "http://backend.local"
     };
 ---
 apiVersion: apps/v1
