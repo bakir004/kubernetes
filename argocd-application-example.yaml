@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: delfin-app
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/bakir004/kubernetes.git # Your Git repository URL
+    targetRevision: HEAD # Branch, tag, or commit SHA (e.g., main, master, HEAD)
+    path: . # Path to the folder/directory in the repo (use "." for root, or "k8s", "manifests", etc.)
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
