@@ -1,0 +1,8 @@
+# Copy this to terraform.tfvars and fill in your values
+# terraform.tfvars is in .gitignore, so it won't be committed
+
+hcloud_token = "your-hetzner-cloud-api-token-here"
+worker_count = 2
+server_type  = "cx21"  # Options: cx11, cx21, cx31, cpx21, etc.
+location     = "nbg1"  # Options: nbg1, fsn1, hel1, ash, hil
+
