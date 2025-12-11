@@ -1,0 +1,11 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: postgresql-preprod
+  namespace: preprod
+spec:
+  selector:
+    matchLabels:
+      cnpg.io/cluster: postgresql-preprod
+  podMetricsEndpoints:
+    - port: metrics

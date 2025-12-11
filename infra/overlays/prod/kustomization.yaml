@@ -16,7 +16,7 @@ replicas:
 
 images:
   - name: bakeroni1/backend
-    newTag: 1.0.8
+    newTag: 1.1.0
   - name: bakeroni1/frontend
     newTag: 1.0.3
 
@@ -79,3 +79,27 @@ patchesStrategicMerge:
         window.APP_CONFIG = {
           backendUrl: "https://api.cluster.bakircinjarevic.com"
         };
+  - |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: backend
+    spec:
+      template:
+        spec:
+          containers:
+            - name: backend
+              env:
+                - name: DB_HOST
+                  value: "postgresql-prod-rw.prod.svc.cluster.local"
+                - name: DB_PORT
+                  value: "5432"
+                - name: DB_NAME
+                  value: "appdb"
+                - name: DB_USER
+                  value: "appuser"
+                - name: DB_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: postgres-prod-credentials
+                      key: password

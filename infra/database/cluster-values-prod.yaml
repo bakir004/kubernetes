@@ -1,0 +1,58 @@
+# Production PostgreSQL Cluster Values
+# Production-ready configuration with higher resources and HA
+
+cluster:
+  name: postgresql-prod
+  instances: 3 # 1 primary + 2 replicas for HA
+
+  storage:
+    size: 20Gi
+    # For production, use network-attached storage
+    # Options:
+    # - longhorn (distributed block storage)
+    # - hcloud-volume (Hetzner Cloud volumes via CSI)
+    # - nfs-client (NFS)
+    storageClass: local-path # Change to your production storage class
+    # storageClass: longhorn  # Recommended for production
+
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "1000m"
+    limits:
+      memory: "2Gi"
+      cpu: "2000m"
+
+  postgresql:
+    parameters:
+      max_connections: "300"
+      shared_buffers: "1GB"
+      effective_cache_size: "3GB"
+      maintenance_work_mem: "128MB"
+      work_mem: "8MB"
+      max_wal_size: "8GB"
+
+  # Enable backups in production
+  backup:
+    enabled: true
+    # Configure your backup destination here
+    # barmanObjectStore:
+    #   destinationPath: "s3://your-backup-bucket/prod-postgres"
+    #   s3Credentials:
+    #     accessKeyId:
+    #       name: postgres-backup-credentials
+    #       key: ACCESS_KEY_ID
+    #     secretAccessKey:
+    #       name: postgres-backup-credentials
+    #       key: SECRET_ACCESS_KEY
+    #   wal:
+    #     retention: "14d"
+    #   data:
+    #     retention: "90d"
+
+  bootstrap:
+    initdb:
+      database: appdb
+      owner: appuser
+      secret:
+        name: postgres-prod-credentials

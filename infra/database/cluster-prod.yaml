@@ -1,0 +1,64 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgresql-prod
+  namespace: prod
+spec:
+  instances: 3 # 1 primary + 2 replicas for HA
+
+  postgresql:
+    parameters:
+      max_connections: "300"
+      shared_buffers: "1GB"
+      effective_cache_size: "3GB"
+      maintenance_work_mem: "128MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "16MB"
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: "8MB"
+      min_wal_size: "1GB"
+      max_wal_size: "8GB"
+      max_worker_processes: "4"
+      max_parallel_workers_per_gather: "2"
+      max_parallel_workers: "4"
+      max_parallel_maintenance_workers: "2"
+
+  storage:
+    size: 20Gi
+    # For production, use network-attached storage:
+    # - longhorn (distributed block storage, recommended for k3s)
+    # - hcloud-volume (Hetzner Cloud volumes via CSI)
+    storageClass: local-path # TODO: Change to longhorn or hcloud-volume for production
+
+  resources:
+    requests:
+      memory: "1Gi"
+      cpu: "1000m"
+    limits:
+      memory: "2Gi"
+      cpu: "2000m"
+
+  bootstrap:
+    initdb:
+      database: appdb
+      owner: appuser
+      secret:
+        name: postgres-prod-credentials
+
+  # Backup configuration (uncomment and configure when ready)
+  # backup:
+  #   barmanObjectStore:
+  #     destinationPath: "s3://your-backup-bucket/prod-postgres"
+  #     s3Credentials:
+  #       accessKeyId:
+  #         name: postgres-backup-credentials
+  #         key: ACCESS_KEY_ID
+  #       secretAccessKey:
+  #         name: postgres-backup-credentials
+  #         key: SECRET_ACCESS_KEY
+  #     wal:
+  #       retention: "14d"
+  #     data:
+  #       retention: "90d"

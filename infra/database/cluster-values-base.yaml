@@ -1,0 +1,78 @@
+# Base PostgreSQL Cluster Values
+# This is a template for creating PostgreSQL clusters
+# Use with: helm template postgresql ./postgresql-chart -f cluster-values-base.yaml
+
+# Cluster configuration
+cluster:
+  name: postgresql-cluster
+  instances: 3 # Number of PostgreSQL instances (1 primary + 2 replicas)
+
+  # PostgreSQL version
+  postgresql:
+    parameters:
+      max_connections: "100"
+      shared_buffers: "256MB"
+      effective_cache_size: "1GB"
+      maintenance_work_mem: "64MB"
+      checkpoint_completion_target: "0.9"
+      wal_buffers: "16MB"
+      default_statistics_target: "100"
+      random_page_cost: "1.1"
+      effective_io_concurrency: "200"
+      work_mem: "4MB"
+      min_wal_size: "1GB"
+      max_wal_size: "4GB"
+      max_worker_processes: "4"
+      max_parallel_workers_per_gather: "2"
+      max_parallel_workers: "4"
+      max_parallel_maintenance_workers: "2"
+
+  # Storage configuration
+  storage:
+    size: 10Gi
+    storageClass: local-path # k3s default storage class
+    # For production, consider using:
+    # storageClass: longhorn  # If using Longhorn
+    # storageClass: hcloud-volume  # If using Hetzner CSI driver
+
+  # Resources
+  resources:
+    requests:
+      memory: "256Mi"
+      cpu: "250m"
+    limits:
+      memory: "512Mi"
+      cpu: "500m"
+
+  # Backup configuration (optional)
+  backup:
+    enabled: false
+    # barmanObjectStore:
+    #   destinationPath: "s3://bucket-name/backup-path"
+    #   s3Credentials:
+    #     accessKeyId:
+    #       name: backup-credentials
+    #       key: ACCESS_KEY_ID
+    #     secretAccessKey:
+    #       name: backup-credentials
+    #       key: SECRET_ACCESS_KEY
+    #   wal:
+    #     retention: "7d"
+    #   data:
+    #     retention: "30d"
+
+  # Monitoring (if Prometheus is available)
+  monitoring:
+    enabled: true
+    podMonitorEnabled: true
+
+  # Bootstrap configuration
+  bootstrap:
+    initdb:
+      database: appdb
+      owner: appuser
+      secret:
+        name: postgres-credentials
+        # The secret should contain:
+        # - username: appuser
+        # - password: <secure-password>

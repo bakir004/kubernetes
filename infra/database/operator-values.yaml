@@ -1,0 +1,31 @@
+# CloudNativePG Operator Helm Values
+# Install with: helm install cnpg cloudnative-pg/cnpg --namespace cnpg-system --create-namespace -f operator-values.yaml
+
+# Default values from the official chart
+# See: https://github.com/cloudnative-pg/cloudnative-pg/tree/main/charts/cloudnative-pg
+
+# Namespace where the operator will be installed
+namespace: cnpg-system
+
+# Image configuration
+image:
+  repository: ghcr.io/cloudnative-pg/cloudnative-pg
+  tag: "" # Will use chart default
+  pullPolicy: IfNotPresent
+
+# Resource limits
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Enable webhooks
+webhook:
+  enabled: true
+
+# Enable cert-manager integration (if you have cert-manager installed)
+certManager:
+  enabled: true

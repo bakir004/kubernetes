@@ -26,6 +26,20 @@ spec:
               value: "http://tempo.monitoring.svc.cluster.local:4318/v1/traces"
             - name: LOG_LEVEL
               value: "info"
+            # Database connection - will be overridden by overlays
+            - name: DB_HOST
+              value: "postgresql-cluster-rw.default.svc.cluster.local"
+            - name: DB_PORT
+              value: "5432"
+            - name: DB_NAME
+              value: "appdb"
+            - name: DB_USER
+              value: "appuser"
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: password
 ---
 apiVersion: v1
 kind: Service

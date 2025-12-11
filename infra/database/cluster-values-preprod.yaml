@@ -1,0 +1,31 @@
+# Preprod PostgreSQL Cluster Values
+# Based on base values with preprod-specific overrides
+
+cluster:
+  name: postgresql-preprod
+  instances: 2 # 1 primary + 1 replica for preprod
+
+  storage:
+    size: 10Gi
+    storageClass: local-path
+
+  resources:
+    requests:
+      memory: "512Mi"
+      cpu: "500m"
+    limits:
+      memory: "1Gi"
+      cpu: "1000m"
+
+  postgresql:
+    parameters:
+      max_connections: "200"
+      shared_buffers: "512MB"
+      effective_cache_size: "2GB"
+
+  bootstrap:
+    initdb:
+      database: appdb
+      owner: appuser
+      secret:
+        name: postgres-preprod-credentials
