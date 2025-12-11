@@ -18,6 +18,7 @@ let nextId = 4;
 
 // Health check endpoint
 app.get("/health", (req, res) => {
+  console.log("Health check endpoint called");
   res.json({ status: "ok", message: "Backend is healthy" });
 });
 
