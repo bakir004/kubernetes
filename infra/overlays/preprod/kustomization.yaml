@@ -14,7 +14,7 @@ replicas:
 
 images:
   - name: bakeroni1/backend
-    newTag: 1.0.7
+    newTag: 1.0.8
   - name: bakeroni1/frontend
     newTag: 1.0.3
 
