@@ -1,3 +1,6 @@
+// Initialize OpenTelemetry BEFORE importing other modules
+require("./instrumentation");
+
 const express = require("express");
 const cors = require("cors");
 const winston = require("winston");
