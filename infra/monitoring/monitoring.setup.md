@@ -68,7 +68,9 @@ helm install tempo grafana/tempo-distributed \
  --set tempo.tempo.queryFrontend.resources.requests.memory=512Mi \
  --set tempo.tempo.queryFrontend.resources.requests.cpu=100m \
  --set tempo.tempo.distributor.resources.requests.memory=256Mi \
- --set tempo.tempo.distributor.resources.requests.cpu=100m
+ --set tempo.tempo.distributor.resources.requests.cpu=100m \
+ --set tempo.tempo.distributor.receivers.otlp.protocols.grpc.enabled=true \
+ --set tempo.tempo.distributor.receivers.otlp.protocols.http.enabled=true
 
 # Wait for Tempo to be ready
 
@@ -102,7 +104,7 @@ kubectl wait --for=condition=ready pod -l app.kubernetes.io/name=tempo -n monito
 
 # It will automatically send traces to Tempo at:
 
-# http://tempo-distributor.monitoring.svc.cluster.local:4318/v1/traces
+# http://tempo-distributor.monitoring.svc.cluster.local:3200/otlp/v1/traces
 
 #
 

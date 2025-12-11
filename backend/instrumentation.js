@@ -9,10 +9,11 @@ const {
   SemanticResourceAttributes,
 } = require("@opentelemetry/semantic-conventions");
 
-// Get Tempo endpoint from environment or use default
+// Get Tempo endpoint from environment or use correct default
+// Default uses port 3200 with /otlp/v1/traces path (correct for Tempo distributed)
 const tempoEndpoint =
   process.env.TEMPO_ENDPOINT ||
-  "http://tempo-distributor.monitoring.svc.cluster.local:4318/v1/traces";
+  "http://tempo-distributor.monitoring.svc.cluster.local:3200/otlp/v1/traces";
 
 const sdk = new NodeSDK({
   resource: new Resource({

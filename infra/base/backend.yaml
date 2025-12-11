@@ -23,7 +23,7 @@ spec:
               name: http
           env:
             - name: TEMPO_ENDPOINT
-              value: "http://tempo-distributor.monitoring.svc.cluster.local:4318/v1/traces"
+              value: "http://tempo-distributor.monitoring.svc.cluster.local:3200/otlp/v1/traces"
             - name: LOG_LEVEL
               value: "info"
 ---
